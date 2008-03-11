@@ -12,7 +12,7 @@
     See the PATElectronCleaner documentation for configuration details.
    
     \author F.J. Ronga (ETH Zurich)
-    \version $Id: ElectronSelector.h,v 1.5 2008/02/07 15:51:01 fronga Exp $
+    \version $Id: ElectronSelector.h,v 1.6 2008/02/13 10:30:35 fronga Exp $
 **/
 
 #include <string>
@@ -37,14 +37,14 @@ namespace pat {
 
     /// Returns 0 if electron matches criteria, a flag otherwise.
     /// Criteria depend on the selector's configuration.
-    /// Electron IDs only need to be provided if selection is based
-    /// on it (cut, neural net or likelihood). Cluster shapes are for
+    /// Electron IDs are only used if selection is based on it 
+    /// (cut, neural net or likelihood). Cluster shapes are for
     /// custom selection only.
     const ParticleStatus
     filter( const unsigned int&          index,
             const edm::View<Electron>&   electrons,
-            const ElectronIDmap&         electronIDs = 0,
-            const reco::ClusterShape*    clusterShape = 0
+            const ElectronIDmap&         electronID,
+            const reco::ClusterShape*    clusterShape
             ) const;
     
     /// Returns the electron ID object based of the given electron.
