@@ -8,40 +8,57 @@ using namespace reco;
 
 
 //______________________________________________________________________________
-const pat::ParticleStatus
+MuonSelector::MuonSelector( const edm::ParameterSet& config ) :
+  selectionCfg_(config),
+  selectionType_( config.getParameter<std::string>("type"))
+{
+
+  if ( selectionType_ == "custom" )
+    {
+      dPbyPmax_ = config.getParameter<double>("dPbyPmax");
+      chi2max_  = config.getParameter<double>("chi2max");
+      nHitsMin_ = config.getParameter<int>("nHitsMin");
+    }
+
+}
+
+
+//______________________________________________________________________________
+const unsigned int 
 MuonSelector::filter( const unsigned int&    index, 
                       const edm::View<Muon>& muons ) const
 {
 
   // List of possible selections
-  if      ( config_.selectionType == "none"  ) 
+  if      ( selectionType_ == "none"  ) 
     {
       return GOOD;
     }
-  else if ( config_.selectionType == "globalMuons" )
+  else if ( selectionType_ == "globalMuons" )
     {
       if ( muons[index].isGlobalMuon() ) return GOOD;
-      else return BAD;
+      return BAD;
     }
-  else if ( config_.selectionType == "muId"  )
+  else if ( selectionType_ == "muId"  )
     {
-      return muIdSelection_( index, muons );
+      throw edm::Exception(edm::errors::UnimplementedFeature)
+        << "Sorry: muId-based selection is not implemented yet";
     }
-  else if ( config_.selectionType == "custom"     ) 
+  else if ( selectionType_ == "custom"     ) 
     {
       return customSelection_( index, muons );
     }
 
   // Throw! unknown configuration
   throw edm::Exception(edm::errors::Configuration) 
-    << "Unknown electron ID selection " << config_.selectionType;
+    << "Unknown electron ID selection " << selectionType_;
 
 }
 
 //______________________________________________________________________________
-const pat::ParticleStatus
+const unsigned int 
 MuonSelector::customSelection_( const unsigned int&    index, 
-                                const edm::View<Muon>& muons ) const
+                      const edm::View<Muon>& muons ) const
 {
 
   // Custom muon selection from SusyAnalyzer (TQAF has a subset of these cuts)
@@ -58,28 +75,12 @@ MuonSelector::customSelection_( const unsigned int&    index,
   float chisq     = muontrack->normalizedChi2();
   int nHitsValid  = muontrack->numberOfValidHits();
 
-  if ( dpt_track >= config_.dPbyPmax * pt_track ) return BAD;
+  if ( dpt_track >= dPbyPmax_ * pt_track ) return BAD;
   
-  if ( chisq > config_.chi2max ) return BAD;
+  if ( chisq > chi2max_ ) return BAD;
 
-  if ( nHitsValid < config_.nHitsMin ) return BAD;
-
-  return GOOD;
-
-}
-
-
-const pat::ParticleStatus
-MuonSelector::muIdSelection_( const unsigned int&    index, 
-                                const edm::View<Muon>& muons ) const
-{
-  // Muon Id
-  if(muons[index].isTrackerMuon()){
-  	// TMLastStation algorithm
-  	if(!muonid::isGoodMuon(muons[index], config_.flag)){
-  		return BAD;	
-  	}
-  }
+  if ( nHitsValid < nHitsMin_ ) return BAD;
 
   return GOOD;
+
 }
