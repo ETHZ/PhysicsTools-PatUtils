@@ -23,7 +23,7 @@ MuonSelector::filter( const unsigned int&    index,
       if ( muons[index].isGlobalMuon() ) return GOOD;
       else return BAD;
     }
-  else if ( config_.selectionType == "muId"  )
+  else if ( config_.selectionType == "muonPOG"  )
     {
       return muIdSelection_( index, muons );
     }
