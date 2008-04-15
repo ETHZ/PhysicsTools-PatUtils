@@ -14,7 +14,7 @@
     (An adapter exists for use in CMSSW: reco::modules::ParameterAdapter< pat::MuonSelector >.)
 
     \author F.J. Ronga (ETH Zurich)
-    \version $Id: MuonSelector.h,v 1.5 2008/04/02 15:42:24 zeidler Exp $
+    \version $Id: MuonSelector.h,v 1.1.2.1 2008/04/03 13:02:36 gpetrucc Exp $
 */
 
 #include <string>
@@ -38,7 +38,7 @@ namespace pat {
     int    nHitsMin;
     //@}
 	
-	/// @name Option for "muId" selection type:
+	/// @name Option for "muonPOG" selection type:
     //@{
     muonid::SelectionType flag;
     //@}
