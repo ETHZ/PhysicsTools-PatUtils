@@ -74,12 +74,13 @@ MuonSelector::muIdSelection_( const unsigned int&    index,
                                 const edm::View<Muon>& muons ) const
 {
   // Muon Id
-  if(muons[index].isTrackerMuon()){
-  	// TMLastStation algorithm
-  	if(!muonid::isGoodMuon(muons[index], config_.flag)){
-  		return BAD;	
-  	}
-  }
-
+  if ( muons[index].isTrackerMuon() ) {
+    if( !muonid::isGoodMuon(muons[index], config_.flag) ) return BAD;
+  } else
+    throw edm::Exception(edm::errors::UnimplementedFeature) 
+      << "MuonPOG selection only works on tracker muons in releases < 1_7.\n"
+      << "Please change selection to \"globalMuons\" (recommended) or use tracker muons.\n";
+    
+  
   return GOOD;
 }
