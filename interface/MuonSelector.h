@@ -14,13 +14,12 @@
     (An adapter exists for use in CMSSW: reco::modules::ParameterAdapter< pat::MuonSelector >.)
 
     \author F.J. Ronga (ETH Zurich)
-    \version $Id: MuonSelector.h,v 1.1.2.1 2008/04/03 13:02:36 gpetrucc Exp $
+    \version $Id: MuonSelector.h,v 1.1.2.2 2008/04/15 06:56:15 fronga Exp $
 */
 
 #include <string>
 
 #include "DataFormats/MuonReco/interface/Muon.h"
-#include "RecoMuon/MuonIdentification/interface/IdGlobalFunctions.h"
 
 #include "PhysicsTools/PatUtils/interface/ParticleCode.h"
 
@@ -38,9 +37,9 @@ namespace pat {
     int    nHitsMin;
     //@}
 	
-	/// @name Option for "muonPOG" selection type:
+    /// @name Option for "muonPOG" selection type:
     //@{
-    muonid::SelectionType flag;
+    reco::Muon::SelectionType flag;
     //@}
 	
   };
