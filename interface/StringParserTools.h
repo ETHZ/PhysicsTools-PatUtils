@@ -47,8 +47,8 @@ private:
     template<typename Obj>
     double
     tryEval(const reco::Candidate &c, const boost::shared_ptr<StringObjectFunction<Obj> > &func) const {
-        if (func.get()) return (*func)(static_cast<const Obj &>(c));
-        else throwBadType(typeid(c));
+        if (func.get()) return (*func)(dynamic_cast<const Obj &>(c));
+        else { throwBadType(typeid(c)); return 0.; }
     }
 
     // out of line throw exception
@@ -89,8 +89,8 @@ private:
     template<typename Obj>
     bool
     tryEval(const reco::Candidate &c, const boost::shared_ptr<StringCutObjectSelector<Obj> > &func) const {
-        if (func.get()) return (*func)(static_cast<const Obj &>(c));
-        else throwBadType(typeid(c));
+        if (func.get()) return (*func)(dynamic_cast<const Obj &>(c));
+        else { throwBadType(typeid(c)); return false; }
     }
 
     // out of line throw exception

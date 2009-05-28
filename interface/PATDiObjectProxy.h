@@ -16,7 +16,7 @@
 
 namespace pat {
 
-/* Now we implement PATDiObjectProxy with typeid & static_casts on the fly. */
+/* Now we implement PATDiObjectProxy with typeid & dynamic_casts on the fly. */
 class DiObjectProxy {
 
    public: 
@@ -109,7 +109,7 @@ class DiObjectProxy {
                                                    << " Requested TypeID  : " << ClassName<T>::name() << "\n"
                                                    << " Found TypeID      : " << className(*ptr) << "\n";
             }
-            return static_cast<const T &>(*ptr);
+            return dynamic_cast<const T &>(*ptr);
         }
 
         template<typename T> 
@@ -120,7 +120,7 @@ class DiObjectProxy {
                         "you can't get use methods that get a particle by type if the two are of the same type!\n" <<
                         " Requested Type:" << ClassName<T>::name() << "\n";
                 }
-                return static_cast<const T &>(*cand1_);
+                return dynamic_cast<const T &>(*cand1_);
             } else {
                 if (typeid(T) != *type2_) {
                     throw cms::Exception("Type Error") << "pat::DiObjectProxy: " << 
@@ -129,7 +129,7 @@ class DiObjectProxy {
                         " Type of first :" << className(*cand1_) << "\n" <<
                         " Type of second:" << className(*cand2_) << "\n";
                 }
-                return static_cast<const T &>(*cand2_);
+                return dynamic_cast<const T &>(*cand2_);
             }
         }
 
