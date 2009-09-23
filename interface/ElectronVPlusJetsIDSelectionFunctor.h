@@ -4,9 +4,9 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
-#include <functional>
+#include "PhysicsTools/Utilities/interface/Selector.h"
 
-class ElectronVPlusJetsIDSelectionFunctor : public std::unary_function<pat::Electron, bool>  {
+class ElectronVPlusJetsIDSelectionFunctor : public Selector<pat::Electron>  {
 
  public: // interface
 
@@ -15,20 +15,22 @@ class ElectronVPlusJetsIDSelectionFunctor : public std::unary_function<pat::Elec
  ElectronVPlusJetsIDSelectionFunctor( Version_t version ) :
   version_(version)
   {
+    push_back("D0",        0.2);
+    push_back("RelIso",    0.1);
   }
 
   // Allow for multiple definitions of the cuts. 
-  bool operator()( const pat::Electron & electron ) const 
+  bool operator()( const pat::Electron & electron, std::strbitset & ret )  
   { 
 
-    if ( version_ == SUMMER08 ) return summer08Cuts( electron );
+    if ( version_ == SUMMER08 ) return summer08Cuts( electron, ret );
     else {
       return false;
     }
   }
 
   // cuts based on craft 08 analysis. 
-  bool summer08Cuts( const pat::Electron & electron) const
+  bool summer08Cuts( const pat::Electron & electron, std::strbitset & ret) 
   {
 
     double corr_d0 = electron.dB();
@@ -40,14 +42,10 @@ class ElectronVPlusJetsIDSelectionFunctor : public std::unary_function<pat::Elec
     
     double relIso = (ecalIso + hcalIso + trkIso) / pt;
 
-    // if the electron passes the event selection, add it to the output list
-    if ( fabs(corr_d0)  < 0.2 &&
-	 relIso         < 0.1 ) {
-      return true;
-    } else {
-      return false;
-    }
+    if ( fabs(corr_d0) <  cut("D0",     double()) || !(*this)["D0"]      ) passCut(ret, "D0"     );
+    if ( relIso        <  cut("RelIso", double()) || !(*this)["RelIso"]  ) passCut(ret, "RelIso" );
 
+    return true;
   }
   
  private: // member variables
