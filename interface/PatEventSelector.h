@@ -8,7 +8,7 @@
   This is a placeholder. 
 
   \author Salvatore Rappoccio
-  \version  $Id: EventSelector.h,v 1.1 2009/09/22 16:01:48 srappocc Exp $
+  \version  $Id: PatEventSelector.h,v 1.1.2.1 2009/09/23 16:29:22 srappocc Exp $
 */
 
 
@@ -19,6 +19,7 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/PatCandidates/interface/Tau.h"
+#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
 #include <fstream>
 #include <functional>
 
@@ -31,6 +32,7 @@ namespace pat {
     std::vector<pat::Muon>      muons;
     std::vector<pat::Tau>       taus;
     std::vector<pat::Photon>    photons;
+    pat::TriggerEvent const *   triggerEvent;
   };
 
 typedef Selector<PatSummaryEvent> PatEventSelector;

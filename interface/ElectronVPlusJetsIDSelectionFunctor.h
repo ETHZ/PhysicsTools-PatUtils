@@ -12,11 +12,13 @@ class ElectronVPlusJetsIDSelectionFunctor : public Selector<pat::Electron>  {
 
   enum Version_t { SUMMER08, N_VERSIONS };
 
- ElectronVPlusJetsIDSelectionFunctor( Version_t version ) :
+  ElectronVPlusJetsIDSelectionFunctor( Version_t version,
+				       double d0 = 0.2,
+				       double reliso = 0.1) :
   version_(version)
   {
-    push_back("D0",        0.2);
-    push_back("RelIso",    0.1);
+    push_back("D0",        d0);
+    push_back("RelIso",    reliso);
   }
 
   // Allow for multiple definitions of the cuts. 

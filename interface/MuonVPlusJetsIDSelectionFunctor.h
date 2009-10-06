@@ -12,16 +12,21 @@ class MuonVPlusJetsIDSelectionFunctor : public Selector<pat::Muon> {
 
   enum Version_t { SUMMER08, N_VERSIONS };
 
- MuonVPlusJetsIDSelectionFunctor( Version_t version ) :
+  MuonVPlusJetsIDSelectionFunctor( Version_t version,
+				   double chi2 = 10.0,
+				   double d0 = 0.2,
+				   int nhits = 11,
+				   double ecaliso = 4.0,
+				   double hcaliso = 6.0,
+				   double reliso = 0.05 ) :
   version_(version)
   {
-    push_back("Chi2",     10.0);
-    push_back("D0",        0.2);
-    push_back("NHits",      11);
-    push_back("ECalIso",   6.0);
-    push_back("HCalIso",   4.0);
-    push_back("RelIso",    0.1);
-
+    push_back("Chi2",      chi2   );
+    push_back("D0",        d0     );
+    push_back("NHits",     nhits  );
+    push_back("ECalIso",   ecaliso);
+    push_back("HCalIso",   hcaliso);
+    push_back("RelIso",    reliso );
   }
 
   // Allow for multiple definitions of the cuts. 
