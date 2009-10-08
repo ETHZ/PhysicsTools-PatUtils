@@ -6,6 +6,8 @@
 
 #include "PhysicsTools/Utilities/interface/Selector.h"
 
+#include <iostream>
+
 class MuonVPlusJetsIDSelectionFunctor : public Selector<pat::Muon> {
 
  public: // interface
@@ -27,6 +29,14 @@ class MuonVPlusJetsIDSelectionFunctor : public Selector<pat::Muon> {
     push_back("ECalVeto",   ecaliso);
     push_back("HCalVeto",   hcaliso);
     push_back("RelIso",    reliso );
+
+    set("Chi2");
+    set("D0");
+    set("NHits");
+    set("ECalVeto");
+    set("HCalVeto");
+    set("RelIso");
+
   }
 
   // Allow for multiple definitions of the cuts. 
@@ -56,12 +66,12 @@ class MuonVPlusJetsIDSelectionFunctor : public Selector<pat::Muon> {
 
     double relIso = (ecalIso + hcalIso + trkIso) / pt;
 
-    if ( norm_chi2     <  cut("Chi2",   double()) || !(*this)["Chi2"]    ) passCut(ret, "Chi2"   );
-    if ( fabs(corr_d0) <  cut("D0",     double()) || !(*this)["D0"]      ) passCut(ret, "D0"     );
-    if ( nhits         >= cut("NHits",  int()   ) || !(*this)["NHits"]   ) passCut(ret, "NHits"  );
-    if ( hcalVeto      <  cut("HCalVeto",double())|| !(*this)["HCalVeto"]) passCut(ret, "HCalVeto");
-    if ( ecalVeto      <  cut("ECalVeto",double())|| !(*this)["ECalVeto"]) passCut(ret, "ECalVeto");
-    if ( relIso        <  cut("RelIso", double()) || !(*this)["RelIso"]  ) passCut(ret, "RelIso" );
+    if ( norm_chi2     <  cut("Chi2",   double()) || ignoreCut("Chi2")    ) passCut(ret, "Chi2"   );
+    if ( fabs(corr_d0) <  cut("D0",     double()) || ignoreCut("D0")      ) passCut(ret, "D0"     );
+    if ( nhits         >= cut("NHits",  int()   ) || ignoreCut("NHits")   ) passCut(ret, "NHits"  );
+    if ( hcalVeto      <  cut("HCalVeto",double())|| ignoreCut("HCalVeto")) passCut(ret, "HCalVeto");
+    if ( ecalVeto      <  cut("ECalVeto",double())|| ignoreCut("ECalVeto")) passCut(ret, "ECalVeto");
+    if ( relIso        <  cut("RelIso", double()) || ignoreCut("RelIso")  ) passCut(ret, "RelIso" );
 
     return (bool)ret;
   }

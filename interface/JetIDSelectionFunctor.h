@@ -25,6 +25,13 @@ class JetIDSelectionFunctor : public Selector<pat::Jet>  {
 
     push_back("TIGHT_fHPD");
     push_back("TIGHT_EMF");
+
+    // all on by default
+    set("LOOSE_fHPD");
+    set("LOOSE_N90Hits");
+    set("LOOSE_EMF");
+    set("TIGHT_fHPD");
+    set("TIGHT_EMF");
     
   }
 
@@ -45,9 +52,9 @@ class JetIDSelectionFunctor : public Selector<pat::Jet>  {
     double corrPt = jet.correctedP4( pat::JetCorrFactors::L3 ).Pt();
 
     // loose fhpd cut
-    if ( ! (*this)["LOOSE_fHPD"]    || jet.fHPD() < 0.98 ) passCut( ret, "LOOSE_fHPD");
+    if ( ignoreCut("LOOSE_fHPD")    || jet.fHPD() < 0.98 ) passCut( ret, "LOOSE_fHPD");
     // loose n90 hits cut
-    if ( ! (*this)["LOOSE_N90Hits"] || jet.n90Hits() > 1 ) passCut( ret, "LOOSE_N90Hits");
+    if ( ignoreCut("LOOSE_N90Hits") || jet.n90Hits() > 1 ) passCut( ret, "LOOSE_N90Hits");
 
     // loose EMF Cut
     bool emf_loose = true;
@@ -57,12 +64,12 @@ class JetIDSelectionFunctor : public Selector<pat::Jet>  {
       if( jet.emEnergyFraction() <= -0.9 ) emf_loose = false;
       if( corrPt > 80 && jet.emEnergyFraction() >= 1 ) emf_loose = false;
     }
-    if ( !(*this)["LOOSE_EMF"] || emf_loose ) passCut(ret, "LOOSE_EMF");
+    if ( ignoreCut("LOOSE_EMF") || emf_loose ) passCut(ret, "LOOSE_EMF");
  
     // tight fhpd cut
     bool tight_fhpd = true;
     if ( jet.pt() >= 25 && jet.fHPD() >= 0.95 ) tight_fhpd = false;
-    if ( !(*this)["TIGHT_fHPD"] || tight_fhpd ) passCut(ret, "TIGHT_fHPD");
+    if ( ignoreCut("TIGHT_fHPD") || tight_fhpd ) passCut(ret, "TIGHT_fHPD");
 	
     // tight emf cut
     bool tight_emf = true;
@@ -82,7 +89,7 @@ class JetIDSelectionFunctor : public Selector<pat::Jet>  {
 	
       } // end if HF
     }// end if outside HBHE
-    if ( !(*this)["TIGHT_EMF"] || tight_emf ) passCut(ret, "TIGHT_EMF");
+    if ( ignoreCut("TIGHT_EMF") || tight_emf ) passCut(ret, "TIGHT_EMF");
     
     return (bool)ret;
   }
