@@ -24,8 +24,8 @@ class MuonVPlusJetsIDSelectionFunctor : public Selector<pat::Muon> {
     push_back("Chi2",      chi2   );
     push_back("D0",        d0     );
     push_back("NHits",     nhits  );
-    push_back("ECalIso",   ecaliso);
-    push_back("HCalIso",   hcaliso);
+    push_back("ECalVeto",   ecaliso);
+    push_back("HCalVeto",   hcaliso);
     push_back("RelIso",    reliso );
   }
 
@@ -44,7 +44,10 @@ class MuonVPlusJetsIDSelectionFunctor : public Selector<pat::Muon> {
   {
     double norm_chi2 = muon.normChi2();
     double corr_d0 = muon.dB();
-    unsigned int nhits = muon.numberOfValidHits();
+    int nhits = static_cast<int>( muon.numberOfValidHits() );
+    
+    double ecalVeto = muon.isolationR03().emVetoEt;
+    double hcalVeto = muon.isolationR03().hadVetoEt;
 	
     double hcalIso = muon.hcalIso();
     double ecalIso = muon.ecalIso();
@@ -56,11 +59,11 @@ class MuonVPlusJetsIDSelectionFunctor : public Selector<pat::Muon> {
     if ( norm_chi2     <  cut("Chi2",   double()) || !(*this)["Chi2"]    ) passCut(ret, "Chi2"   );
     if ( fabs(corr_d0) <  cut("D0",     double()) || !(*this)["D0"]      ) passCut(ret, "D0"     );
     if ( nhits         >= cut("NHits",  int()   ) || !(*this)["NHits"]   ) passCut(ret, "NHits"  );
-    if ( hcalIso       <  cut("HCalIso",double()) || !(*this)["HCalIso"] ) passCut(ret, "HCalIso");
-    if ( ecalIso       <  cut("ECalIso",double()) || !(*this)["ECalIso"] ) passCut(ret, "ECalIso");
+    if ( hcalVeto      <  cut("HCalVeto",double())|| !(*this)["HCalVeto"]) passCut(ret, "HCalVeto");
+    if ( ecalVeto      <  cut("ECalVeto",double())|| !(*this)["ECalVeto"]) passCut(ret, "ECalVeto");
     if ( relIso        <  cut("RelIso", double()) || !(*this)["RelIso"]  ) passCut(ret, "RelIso" );
 
-    return true;
+    return (bool)ret;
   }
   
  private: // member variables

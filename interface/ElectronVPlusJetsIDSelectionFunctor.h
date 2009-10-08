@@ -47,7 +47,7 @@ class ElectronVPlusJetsIDSelectionFunctor : public Selector<pat::Electron>  {
     if ( fabs(corr_d0) <  cut("D0",     double()) || !(*this)["D0"]      ) passCut(ret, "D0"     );
     if ( relIso        <  cut("RelIso", double()) || !(*this)["RelIso"]  ) passCut(ret, "RelIso" );
 
-    return true;
+    return (bool)ret;
   }
   
  private: // member variables
