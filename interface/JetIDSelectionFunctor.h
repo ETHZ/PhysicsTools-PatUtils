@@ -22,7 +22,7 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
-#include "PhysicsTools/SelectorUtils/interface/Selector.h"
+#include "PhysicsTools/Utilities/interface/Selector.h"
 
 #include <TMath.h>
 class JetIDSelectionFunctor : public Selector<pat::Jet>  {
@@ -32,7 +32,6 @@ class JetIDSelectionFunctor : public Selector<pat::Jet>  {
   enum Version_t { CRAFT08, N_VERSIONS };
   enum Quality_t { MINIMAL, LOOSE_AOD, LOOSE, TIGHT, N_QUALITY};
   
-
  JetIDSelectionFunctor( Version_t version, Quality_t quality ) :
   version_(version), quality_(quality)
   {
